@@ -1,7 +1,3 @@
-# Course: CS261 - Data Structures
-# Author:
-# Assignment:
-# Description:
 
 class DirectedGraph:
     """

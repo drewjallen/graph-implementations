@@ -1,8 +1,3 @@
-# Course: 
-# Author: 
-# Assignment: 
-# Description:
-
 
 class UndirectedGraph:
     """
@@ -42,32 +37,97 @@ class UndirectedGraph:
 
     def add_vertex(self, v: str) -> None:
         """
-        Add new vertex to the graph
+        Adds a new vertex to the graph if one
+        with the same name doesn't already exist
         """
-        
+        if self.contains_vertex(v):
+            return
+        else:
+            self.adj_list[v] = []
+
+    def contains_vertex(self, v_name: str) -> bool:
+        """
+        Helper method to find if a vertex already exists
+        or not in the graph
+        """
+        for i in self.adj_list:
+            if i == v_name:
+                return True
+        return False
+
     def add_edge(self, u: str, v: str) -> None:
         """
-        Add edge to the graph
+        Adds edge to the graph between specified
+        vertices. If the vertices don't already exist,
+        they are created.
         """
-        
+        if (u == v):
+            return
+        else:
+            # add_vertex handles the checks
+            # for if the vertices already
+            # exist and if they already do,
+            # nothing happens. Else it adds them
+            self.add_vertex(u)
+            self.add_vertex(v)
+
+            # check if the edge already exists
+            if self.contains_edge(u, v):
+                return
+
+            # create the edge
+            self.adj_list[u].append(v)
+            self.adj_list[v].append(u)
+
+    def contains_edge(self, u: str, v: str) -> bool:
+        """
+        Helper method to check if an edge
+        already exists between two vertices
+        """
+        if v in self.adj_list[u]:
+            return True
+        else:
+            return False
 
     def remove_edge(self, v: str, u: str) -> None:
         """
-        Remove edge from the graph
+        Removes the edge from the graph
         """
-        
+        # check if vertices and/or edge even exists
+        if not self.contains_vertex(v) or not self.contains_vertex(u):
+            return
+        if not self.contains_edge(u, v):
+            return
+
+        # remove the edge
+        self.adj_list[v].remove(u)
+        self.adj_list[u].remove(v)
 
     def remove_vertex(self, v: str) -> None:
         """
         Remove vertex and all connected edges
         """
-        
+
+        # verify the vertex exists
+        if not self.contains_vertex(v):
+            return
+
+        # obtain its list of connected vertices
+        connections = self.adj_list[v].copy()
+
+        # remove the vertex
+        self.adj_list.pop(v)
+
+        # go to each of the connected vertices and remove
+        # the connection to the removed vertex
+        for vertex in connections:
+            self.adj_list[vertex].remove(v)
 
     def get_vertices(self) -> []:
         """
         Return list of vertices in the graph (any order)
         """
-       
+        return [i for i in self.adj_list]
 
     def get_edges(self) -> []:
         """
