@@ -141,12 +141,35 @@ class UndirectedGraph:
                     graph_edges.append((vertex, connection))
 
         return graph_edges
-        
 
     def is_valid_path(self, path: []) -> bool:
         """
         Return true if provided path is valid, False otherwise
         """
+        if not path:
+            return True
+
+        if len(path) == 1:
+            return self.contains_vertex(path[0])
+
+        i = 0
+        j = 1
+        while j < len(path):
+            if path[j] not in self.adj_list[path[i]]:
+                return False
+            else:
+                i += 1
+                j += 1
+
+        return True
+
+
+
+
+
+
+
+
        
 
     def dfs(self, v_start, v_end=None) -> []:
