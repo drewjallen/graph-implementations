@@ -125,7 +125,7 @@ class UndirectedGraph:
 
     def get_vertices(self) -> []:
         """
-        Return list of vertices in the graph (any order)
+        Returns list of vertices in the graph
         """
         return [i for i in self.adj_list]
 
@@ -133,6 +133,14 @@ class UndirectedGraph:
         """
         Return list of edges in the graph (any order)
         """
+        graph_edges = []
+
+        for vertex in self.adj_list:
+            for connection in self.adj_list[vertex]:
+                if (vertex, connection) not in graph_edges and (connection, vertex) not in graph_edges:
+                    graph_edges.append((vertex, connection))
+
+        return graph_edges
         
 
     def is_valid_path(self, path: []) -> bool:
