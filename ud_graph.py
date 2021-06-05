@@ -163,21 +163,30 @@ class UndirectedGraph:
 
         return True
 
-
-
-
-
-
-
-
-       
-
     def dfs(self, v_start, v_end=None) -> []:
         """
-        Return list of vertices visited during DFS search
+        Returns a list of vertices visited during DFS search
         Vertices are picked in alphabetical order
         """
-       
+        if not self.contains_vertex(v_start):
+            return []
+        if v_end is not None:
+            if not self.contains_vertex(v_end):
+                v_end = None
+
+        traversed_vertices = []
+        stack = [v_start]
+
+        while len(stack) != 0:
+            current = stack.pop()
+            if current not in traversed_vertices:
+                traversed_vertices.append(current)
+                if (v_end is not None) and (current == v_end):
+                    return traversed_vertices
+                for vertex in self.adj_list[current]:
+                    stack.append(vertex)
+        return traversed_vertices
+
 
     def bfs(self, v_start, v_end=None) -> []:
         """
