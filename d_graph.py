@@ -203,9 +203,33 @@ class DirectedGraph:
 
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        Return True if graph contains a cycle, False otherwise
         """
-        pass
+        #print("EDGES ARE:")
+        #print(self.get_edges())
+        for i in range(len(self.adj_matrix)):
+            traversed = dict()
+            for j in range(len(self.adj_matrix)):
+                traversed[j] = False
+
+            if not traversed[i]:
+                if self.has_cycle_helper(i, traversed, -1):
+                    return True
+        #print("SHOULD BE FALSE")
+        return False
+
+    def has_cycle_helper(self, vertex, traversed, parent):
+
+        traversed[vertex] = True
+
+        for i in range(len(self.adj_matrix[vertex])):
+            if self.adj_matrix[vertex][i] != 0:
+                if not traversed[i]:
+                    if self.has_cycle_helper(i, traversed, vertex):
+                        return True
+                else:
+                    return True
+        return False
 
     def dijkstra(self, src: int) -> []:
         """
@@ -289,3 +313,8 @@ if __name__ == '__main__':
     print('\n', g)
     for i in range(5):
         print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+
+
+    print("DREW'S TEST")
+    g = DirectedGraph([(0, 4, 2), (5, 0, 16), (6, 3, 6), (6, 12, 19), (7, 0, 12), (9, 1, 13), (9, 7, 5), (10, 11, 17), (12, 4, 3), (12, 9, 12)])
+    g.has_cycle()
