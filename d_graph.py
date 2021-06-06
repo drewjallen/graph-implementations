@@ -1,3 +1,4 @@
+from collections import deque
 
 class DirectedGraph:
     """
@@ -48,7 +49,9 @@ class DirectedGraph:
 
     def add_vertex(self) -> int:
         """
-        TODO: Write this implementation
+        Adds a vertex to the graph
+        and updates the other vertices
+        to account for the new addition
         """
         self.v_count += 1
         self.adj_matrix.append([])
@@ -65,7 +68,11 @@ class DirectedGraph:
 
         return self.v_count
 
-    def contains_vertex_at_index(self, index):
+    def contains_vertex(self, index):
+        """
+        Helper method to see if vertex exists in
+        graph
+        """
         if (index > self.v_count - 1) or (index < 0):
             return False
         else:
@@ -73,9 +80,11 @@ class DirectedGraph:
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
-        TODO: Write this implementation
+        Adds directed edge from the source index
+        to the destination index provided both
+        indices exist in the graph
         """
-        if not self.contains_vertex_at_index(src) or not self.contains_vertex_at_index(dst):
+        if not self.contains_vertex(src) or not self.contains_vertex(dst):
             return
         elif src == dst:
             return
@@ -84,43 +93,113 @@ class DirectedGraph:
 
         self.adj_matrix[src][dst] = weight
 
-
+    def edge_exists(self, src: int, dst: int) -> bool:
+        """
+        Helper method to check if the edge exists
+        or not
+        """
+        if (not self.contains_vertex(src)) or (not self.contains_vertex(dst)):
+            return False
+        else:
+            return self.adj_matrix[src][dst] > 0
 
     def remove_edge(self, src: int, dst: int) -> None:
         """
-        TODO: Write this implementation
+        Removes an edge by setting its weight to 0
         """
-        pass
+        if not self.edge_exists(src, dst):
+            return
+        else:
+            self.adj_matrix[src][dst] = 0
 
     def get_vertices(self) -> []:
         """
-        TODO: Write this implementation
+        Returns list of vertices
         """
-        pass
+        return [i for i in range(self.v_count)]
 
     def get_edges(self) -> []:
         """
         TODO: Write this implementation
         """
-        pass
+        edges = []
+        for i in range(self.v_count):
+            for j in range(self.v_count):
+                if i != j and self.adj_matrix[i][j] != 0:
+                    edges.append((i, j, self.adj_matrix[i][j]))
+        return edges
 
     def is_valid_path(self, path: []) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        if not path:
+            return True
+
+        queue = deque(path)
+
+        while len(queue) > 1:
+            current = queue.popleft()
+            next_node = queue[0]
+            if self.adj_matrix[current][next_node] <= 0:
+                return False
+        return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Returns a list of vertices visited during DFS search
+        Vertices are picked in ascending index order
         """
-        pass
+        if not self.contains_vertex(v_start):
+            return []
+        if v_end is not None:
+            if not self.contains_vertex(v_end):
+                v_end = None
+
+        traversed_vertices = []
+        stack = [v_start]
+
+        while len(stack) != 0:
+            current = stack.pop()
+            if current not in traversed_vertices:
+                traversed_vertices.append(current)
+                if (v_end is not None) and (current == v_end):
+                    return traversed_vertices
+                options = self.adj_matrix[current]
+                j = len(options) - 1
+                while j >= 0:
+                    if options[j] != 0:
+                        stack.append(j)
+                    j -= 1
+        return traversed_vertices
 
     def bfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Return list of vertices visited during BFS search
+        Vertices are picked in alphabetical order
         """
-        pass
+        if not self.contains_vertex(v_start):
+            return []
+        if v_end is not None:
+            if not self.contains_vertex(v_end):
+                v_end = None
+
+        traversed_vertices = []
+        queue = deque([v_start])
+
+        while len(queue) != 0:
+            current = queue.popleft()
+            if current not in traversed_vertices:
+                traversed_vertices.append(current)
+                if (v_end is not None) and (current == v_end):
+                    return traversed_vertices
+                options = self.adj_matrix[current]
+                j = len(options) - 1
+                while j >= 0:
+                    if options[j] != 0:
+                        queue.append(j)
+                    j -= 1
+        return traversed_vertices
 
     def has_cycle(self):
         """
