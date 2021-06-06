@@ -183,7 +183,8 @@ class UndirectedGraph:
                 traversed_vertices.append(current)
                 if (v_end is not None) and (current == v_end):
                     return traversed_vertices
-                for vertex in self.adj_list[current]:
+                options = sorted(self.adj_list[current], reverse=True)
+                for vertex in options:
                     stack.append(vertex)
         return traversed_vertices
 
