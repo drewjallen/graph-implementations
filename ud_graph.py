@@ -1,3 +1,5 @@
+from collections import deque
+
 
 class UndirectedGraph:
     """
@@ -188,12 +190,31 @@ class UndirectedGraph:
                     stack.append(vertex)
         return traversed_vertices
 
-
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
+        if not self.contains_vertex(v_start):
+            return []
+        if v_end is not None:
+            if not self.contains_vertex(v_end):
+                v_end = None
+
+        traversed_vertices = []
+        queue = deque([v_start])
+
+        while len(queue) != 0:
+            current = queue.popleft()
+            if current not in traversed_vertices:
+                traversed_vertices.append(current)
+                if (v_end is not None) and (current == v_end):
+                    return traversed_vertices
+                options = sorted(self.adj_list[current])
+                for vertex in options:
+                    queue.append(vertex)
+        return traversed_vertices
+
         
 
     def count_connected_components(self):
