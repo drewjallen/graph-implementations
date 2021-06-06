@@ -194,11 +194,11 @@ class DirectedGraph:
                 if (v_end is not None) and (current == v_end):
                     return traversed_vertices
                 options = self.adj_matrix[current]
-                j = len(options) - 1
-                while j >= 0:
+                j = 0
+                while j < len(options):
                     if options[j] != 0:
                         queue.append(j)
-                    j -= 1
+                    j += 1
         return traversed_vertices
 
     def has_cycle(self):
