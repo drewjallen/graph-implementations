@@ -215,13 +215,25 @@ class UndirectedGraph:
                     queue.append(vertex)
         return traversed_vertices
 
-        
-
     def count_connected_components(self):
         """
-        Return number of connected componets in the graph
+        Returns number of connected componets in the graph
         """
-      
+        connected_components = []
+        for i in self.adj_list:
+            vertex = i
+            already_counted = False
+            if len(connected_components) == 0:
+                connected_components.append(self.bfs(vertex))
+            else:
+                for j in connected_components:
+                    if vertex in j:
+                        already_counted = True
+                        break
+                if not already_counted:
+                    connected_components.append(self.bfs(vertex))
+
+        return len(connected_components)
 
     def has_cycle(self):
         """
