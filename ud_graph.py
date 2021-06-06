@@ -239,9 +239,29 @@ class UndirectedGraph:
         """
         Return True if graph contains a cycle, False otherwise
         """
-       
+        traversed = dict()
+        for i in self.adj_list:
+            traversed[i] = False
 
-   
+        for i in self.adj_list:
+            if not traversed[i]:
+                if self.has_cycle_helper(i, traversed, -1):
+                    return True
+        return False
+
+    def has_cycle_helper(self, vertex, traversed, parent):
+
+        traversed[vertex] = True
+
+        for i in self.adj_list[vertex]:
+            if not traversed[i]:
+                if self.has_cycle_helper(i, traversed, vertex):
+                    return True
+            elif i != parent:
+                return True
+        return False
+
+
 
 
 if __name__ == '__main__':
