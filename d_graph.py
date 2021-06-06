@@ -50,7 +50,20 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+        self.v_count += 1
+        self.adj_matrix.append([])
+        new_length = len(self.adj_matrix)
+        new_row = self.adj_matrix[new_length - 1]
+
+        i = 0
+        while i < new_length - 1:
+            self.adj_matrix[i].append(0)
+            i += 1
+
+        while len(new_row) < new_length:
+            new_row.append(0)
+
+        return self.v_count
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
