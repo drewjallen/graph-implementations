@@ -205,27 +205,26 @@ class DirectedGraph:
         """
         Return True if graph contains a cycle, False otherwise
         """
-
-        for i in range(len(self.adj_matrix)):
-            traversed = dict()
-            for i in range(len(self.adj_matrix)):
-                traversed[i] = False
-
-            if not traversed[i]:
-                if self.has_cycle_helper(i, traversed, -1):
-                    return True
+        for vertex in range(self.v_count):
+            traversed = []
+            if self.has_cycle_helper(vertex, traversed):
+                return True
         return False
 
-    def has_cycle_helper(self, vertex, traversed, parent):
-
-        traversed[vertex] = True
-
-        for i in range(len(self.adj_matrix[vertex])):
-            if self.adj_matrix[vertex][i] != 0:
-                if not traversed[i]:
-                    if self.has_cycle_helper(i, traversed, vertex):
-                        return True
-                else:
+    def has_cycle_helper(self, vertex, traversed):
+        traversed.append(vertex)
+        options = []
+        i = 0
+        for adjacent in self.adj_matrix[vertex]:
+            if adjacent != 0:
+                options.append(i)
+            i += 1
+        for option in options:
+            if option in traversed:
+                return True
+            else:
+                traversed_copy = traversed.copy()
+                if self.has_cycle_helper(option, traversed_copy):
                     return True
         return False
 
@@ -233,7 +232,12 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+
+        table = dict()
+
+
+        goal = []
+        return goal
 
 
 if __name__ == '__main__':
