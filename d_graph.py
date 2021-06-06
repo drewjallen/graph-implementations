@@ -65,11 +65,26 @@ class DirectedGraph:
 
         return self.v_count
 
+    def contains_vertex_at_index(self, index):
+        if (index > self.v_count - 1) or (index < 0):
+            return False
+        else:
+            return True
+
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if not self.contains_vertex_at_index(src) or not self.contains_vertex_at_index(dst):
+            return
+        elif src == dst:
+            return
+        elif weight <= 0:
+            return
+
+        self.adj_matrix[src][dst] = weight
+
+
 
     def remove_edge(self, src: int, dst: int) -> None:
         """
@@ -130,7 +145,7 @@ if __name__ == '__main__':
         g.add_vertex()
     print(g)
 
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+    edges = [(0, 6, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
              (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     for src, dst, weight in edges:
         g.add_edge(src, dst, weight)
